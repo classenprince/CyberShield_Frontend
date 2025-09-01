@@ -3,22 +3,26 @@ import MetricsPanel from './MetricsPanel';
 import AlertsSection from './AlertsSection';
 import './Dashboard.css';
 
-const Dashboard = ({ data }) => {
+const Dashboard = ({ data, refreshing }) => {
   // Calculate top accounts by different metrics
   const topHubAccounts = [...data]
+    .filter(item => item['Closeness Centrality'] !== undefined)
     .sort((a, b) => b['Closeness Centrality'] - a['Closeness Centrality'])
     .slice(0, 3);
 
   const topBridgeAccounts = [...data]
+    .filter(item => item['Betweenness Centrality'] !== undefined)
     .sort((a, b) => b['Betweenness Centrality'] - a['Betweenness Centrality'])
     .slice(0, 3);
 
   const peripheralAccounts = [...data]
+    .filter(item => item['Eccentricity'] !== undefined)
     .sort((a, b) => b['Eccentricity'] - a['Eccentricity'])
     .slice(0, 5);
 
-  // Group accounts by modularity class
-  const communities = data.reduce((acc, account) => {
+  // Group accounts by modularity class (only for network data)
+  const networkData = data.filter(item => item['Modularity Class'] !== undefined);
+  const communities = networkData.reduce((acc, account) => {
     const community = account['Modularity Class'];
     if (!acc[community]) acc[community] = [];
     acc[community].push(account);
@@ -78,11 +82,33 @@ const Dashboard = ({ data }) => {
 
   return (
     <div className="dashboard">
+      {/* Refreshing Overlay */}
+      {refreshing && (
+        <div className="refreshing-overlay">
+          <div className="refreshing-content">
+            <div className="refreshing-spinner"></div>
+            <div className="refreshing-text">
+              <h3>🔄 Refreshing Data</h3>
+              <p>Fetching latest intelligence from Gephi...</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <header className="dashboard-header">
         <h1>🛡️ Cyber Shield OSINT Dashboard</h1>
         <p>Identity Intelligence & Network Analysis</p>
+        
+        {/* Refreshing Indicator */}
+        {refreshing && (
+          <div className="header-refresh-indicator">
+            <span className="refresh-dot"></span>
+            <span className="refresh-text">Live Data Refresh</span>
+          </div>
+        )}
+        
         <div className="stats-summary">
-          <span>📊 {data.length} Accounts Analyzed</span>
+          <span>📊 {data.length} Records Analyzed</span>
           <span>🔗 {Object.keys(communities).length} Communities Detected</span>
           <span>🚨 {alerts.length} Alerts Generated</span>
         </div>

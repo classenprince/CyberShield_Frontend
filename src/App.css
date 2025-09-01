@@ -18,20 +18,21 @@ body {
   min-height: 100vh;
 }
 
+/* Enhanced loading container */
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 60px 20px;
+  text-align: center;
 }
 
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 4px solid #3b82f6;
-  border-top: 4px solid transparent;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
@@ -43,9 +44,9 @@ body {
 }
 
 .loading-container p {
-  font-size: 18px;
-  color: #64748b;
-  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
 }
 
 /* Tab Navigation Styles */
@@ -88,4 +89,22 @@ body {
 
 .tab-button.active:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+} 
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .data-source-header {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .switching-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .current-source {
+    flex-direction: column;
+    text-align: center;
+  }
 } 
